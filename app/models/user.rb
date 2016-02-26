@@ -1,6 +1,7 @@
 class User < ApplicationRecord
 
   has_many :tokens, dependent: :destroy
+  has_many :devices, dependent: :destroy
   has_and_belongs_to_many :entries
 
   after_create :generate_token
