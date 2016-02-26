@@ -15,6 +15,8 @@ gem 'puma'
 
 gem 'rack-cors'
 
+gem 'aws-sdk', '~> 2'
+
 group :development, :test do
   gem 'dotenv-rails'
   gem 'sqlite3'
