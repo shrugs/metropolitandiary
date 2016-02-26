@@ -1,6 +1,6 @@
 class CreateApiV1Entries < ActiveRecord::Migration[5.0]
   def change
-    create_table :api_v1_entries do |t|
+    create_table :entries do |t|
       t.string :title
       t.text :content
       t.string :author
