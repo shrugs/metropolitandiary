@@ -13,4 +13,8 @@ when 'development'
     })
   }
 
+  3.times.map {
+    User.create
+  }
+
 end
