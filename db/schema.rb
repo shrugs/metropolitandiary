@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160226005941) do
+ActiveRecord::Schema.define(version: 20160226013228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,19 @@ ActiveRecord::Schema.define(version: 20160226005941) do
     t.datetime "date_published"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+  end
+
+  create_table "api_v1_tokens", force: :cascade do |t|
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "api_v1_tokens", ["user_id"], name: "index_api_v1_tokens_on_user_id", using: :btree
+
+  create_table "api_v1_users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "authors", force: :cascade do |t|
@@ -70,6 +83,15 @@ ActiveRecord::Schema.define(version: 20160226005941) do
 
   add_index "tags", ["series_id"], name: "index_tags_on_series_id", using: :btree
 
+  create_table "tokens", force: :cascade do |t|
+    t.string   "token"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "tokens", ["user_id"], name: "index_tokens_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "provider",               default: "email", null: false
     t.string   "uid",                    default: "",      null: false
@@ -112,10 +134,12 @@ ActiveRecord::Schema.define(version: 20160226005941) do
 
   add_index "volumes", ["series_id"], name: "index_volumes_on_series_id", using: :btree
 
+  add_foreign_key "api_v1_tokens", "users"
   add_foreign_key "series", "publishers"
   add_foreign_key "subscriptions", "series"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "tags", "series"
+  add_foreign_key "tokens", "users"
   add_foreign_key "volumes", "authors"
   add_foreign_key "volumes", "series"
 end
