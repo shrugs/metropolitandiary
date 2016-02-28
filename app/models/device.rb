@@ -48,15 +48,20 @@ class Device < ApplicationRecord
   private
 
   def register_with_sns
-    endpoint = SNS.instance.create_platform_endpoint(
-      platform_application_arn: ENV['SNS_APNS_PLATFORM_APPLICATION_ARN'],
-      token: device_token,
-      attributes: {
-        'UserId' => user.id.to_s,
-        'ChannelId' => device_token,
-      }
-    )
-    self.endpoint_arn = endpoint[:endpoint_arn]
-    self.save
+    begin
+      endpoint = SNS.instance.create_platform_endpoint(
+        platform_application_arn: ENV['SNS_APNS_PLATFORM_APPLICATION_ARN'],
+        token: device_token,
+        attributes: {
+          'UserId' => user.id.to_s,
+          'ChannelId' => device_token,
+        }
+      )
+      self.endpoint_arn = endpoint[:endpoint_arn]
+      self.save
+    rescue Aws::SNS::Errors::InvalidParameter
+      # arn already exists; user deleted the app and is re-installing
+      binding.pry
+    end
   end
 end
