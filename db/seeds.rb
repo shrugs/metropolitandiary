@@ -1,16 +1,15 @@
 
+require 'json'
+
+entries_file = Rails.root.join('db', 'seeds', 'entries.json')
+entries = JSON.parse File.read entries_file
+counter = 0
+Entry.create!(entries) do |e|
+  puts "Created ##{counter += 1} #{e.title}"
+end
+
 
 case Rails.env
 when 'development'
-
-  20.times.map {
-    Entry.create({
-      title: Faker::Book.title,
-      author: Faker::Book.author,
-      content: Faker::Lorem.paragraphs(1 + Random.rand(3)).join("\n\n"),
-      permalink: Faker::Internet.url,
-      date_published: Faker::Time.between(DateTime.now - 2.years, DateTime.now - 1.days)
-    })
-  }
 
 end
