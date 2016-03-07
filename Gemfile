@@ -16,7 +16,8 @@ gem 'puma'
 gem 'rack-cors'
 
 gem 'aws-sdk', '~> 2'
-gem 'geokit-rails'
+# gem 'geokit-rails'
+gem 'andand'
 
 group :development, :test do
   gem 'dotenv-rails'
@@ -29,6 +30,10 @@ group :development do
   gem 'listen', '~> 3.0.5'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+
+  # for scraping entries
+  gem 'httparty'
+  gem 'nokogiri'
 end
 
 group :production , :staging do

@@ -33,7 +33,7 @@ class Api::V1::UsersController < ApplicationController
       end
     end
 
-    user ||= User.create
+    user ||= User.create(user_params)
 
     render json: {
       id: user.id,
@@ -58,7 +58,7 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def user_params
-    params.permit(:device_token)
+    params.permit(:timezone)
   end
 
 end

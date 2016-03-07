@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303180120) do
+ActiveRecord::Schema.define(version: 20160303220002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,10 +34,9 @@ ActiveRecord::Schema.define(version: 20160303180120) do
     t.datetime "date_published"
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
-    t.string   "photo"
     t.decimal  "lat",            precision: 10, scale: 6
     t.decimal  "lng",            precision: 10, scale: 6
-    t.decimal  "radius",         precision: 10, scale: 6
+    t.integer  "radius"
   end
 
   create_table "entries_users", id: false, force: :cascade do |t|
@@ -49,6 +48,17 @@ ActiveRecord::Schema.define(version: 20160303180120) do
 
   add_index "entries_users", ["entry_id", "user_id"], name: "index_entries_users_on_entry_id_and_user_id", using: :btree
 
+  create_table "photos", force: :cascade do |t|
+    t.string   "url",         null: false
+    t.string   "attribution"
+    t.integer  "entry_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.string   "caption"
+  end
+
+  add_index "photos", ["entry_id"], name: "index_photos_on_entry_id", using: :btree
+
   create_table "tokens", force: :cascade do |t|
     t.string   "contents"
     t.integer  "user_id"
@@ -59,8 +69,9 @@ ActiveRecord::Schema.define(version: 20160303180120) do
   add_index "tokens", ["user_id"], name: "index_tokens_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.string   "timezone",   default: "America/New_York", null: false
   end
 
   add_foreign_key "devices", "users"

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     scope '/v1', module: :v1 do
       resources :users
       resources :entries
+      get 'regions', to: 'regions#index'
     end
   end
 
