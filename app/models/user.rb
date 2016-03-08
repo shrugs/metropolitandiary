@@ -2,7 +2,7 @@ class User < ApplicationRecord
 
   has_many :tokens, dependent: :destroy
   has_many :devices, dependent: :destroy
-  # has_many :entries, through: :entries_users
+  has_many :entry_logs
   has_and_belongs_to_many :entries
 
   after_create :generate_token

@@ -16,7 +16,7 @@ gem 'puma'
 gem 'rack-cors'
 
 gem 'aws-sdk', '~> 2'
-# gem 'geokit-rails'
+
 gem 'andand'
 
 group :development, :test do

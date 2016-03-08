@@ -12,4 +12,29 @@ class Api::V1::RegionsController < ApplicationController
     render json: other_entries_hash
   end
 
+  # called when a user enters a region
+  def create
+    # I want a user to get a notification in respnose to this action if:
+    # 1) they have not gotten a notification today
+    # 2) they have gotten a notification today, _but_, it was from a separate region trigger
+
+    # I don't want a user to get this notification if:
+    # 1) They've already received 2 notifications today
+    # 2) They've received an automatically generated entry today
+
+    # AKA, a user can receive either 1 auto entry or up to 2 region entries
+    beginning_of_users_day = ActiveSupport::TimeZone.new(@current_user.timezone).now.beginning_of_day.utc
+    logs = EntryLog.where('created_at >= ?', beginning_of_users_day)
+    if logs.length == 0 || logs.length < 2 && logs.first.is_region?
+      entry = Entry.find_by_id(region_params[:identifier])
+      @current_user.add_entry_to_diary(entry)
+    end
+  end
+
+  private
+
+  def region_params
+    params.require(:identifier)
+  end
+
 end
