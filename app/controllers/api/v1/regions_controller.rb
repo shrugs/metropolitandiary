@@ -3,7 +3,7 @@ class Api::V1::RegionsController < ApplicationController
 
   def index
     # return regions for all of the entries not in the user's diary
-    other_entries = Entry.where('id NOT IN (?)', @current_user.entries.map(&:id))
+    other_entries = @current_user.other_entries
     other_entries_hash = other_entries.map { |e|
       e.slice(:id, :lat, :lng, :radius)
     }.select { |e|
@@ -23,8 +23,7 @@ class Api::V1::RegionsController < ApplicationController
     # 2) They've received an automatically generated entry today
 
     # AKA, a user can receive either 1 auto entry or up to 2 region entries
-    beginning_of_users_day = ActiveSupport::TimeZone.new(@current_user.timezone).now.beginning_of_day.utc
-    logs = @current_user.entry_logs.where('created_at >= ?', beginning_of_users_day)
+    logs = @current_user.todays_entry_logs
     if !Rails.env.production? || logs.length == 0 || logs.length < 2 && logs.first.is_region?
       entry = Entry.find_by_id(region_params[:identifier].to_i)
       @current_user.add_entry_to_diary(entry)

@@ -19,6 +19,8 @@ gem 'aws-sdk', '~> 2'
 
 gem 'andand'
 
+gem 'whenever', :require => false
+
 group :development, :test do
   gem 'dotenv-rails'
   gem 'sqlite3'

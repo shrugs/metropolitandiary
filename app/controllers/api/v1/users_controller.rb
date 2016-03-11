@@ -5,11 +5,10 @@ class Api::V1::UsersController < ApplicationController
   def index
     userHash = ActiveModel::SerializableResource.new(@current_user, {}).as_json
     userHash[:entries] = @current_user.entries.map { |entry|
-      result = ActiveRecord::Base.connection.execute("SELECT created_at from entries_users WHERE (user_id=#{@current_user.id}) AND (entry_id=#{entry.id})")
-      created_at = result.first['created_at']
-
+      entry_log = @current_user.entry_logs.find_by_entry_id(entry.id)
+      created_at = entry_log.andand.created_at
       entryHash = ActiveModel::SerializableResource.new(entry, {}).as_json
-      entryHash[:created_at] = Time.zone.parse created_at
+      entryHash[:created_at] = created_at
       entryHash
     }
     render json: userHash

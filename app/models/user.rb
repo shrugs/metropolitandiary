@@ -19,8 +19,18 @@ class User < ApplicationRecord
     }
   end
 
+  def other_entries
+    # this is probably terribly inefficient
+    Entry.where('id NOT IN (?)', entries.map(&:id))
+  end
+
   def generate_token
     self.tokens.create
+  end
+
+  def todays_entry_logs
+    beginning_of_my_day = ActiveSupport::TimeZone.new(timezone).now.beginning_of_day.utc
+    entry_logs.where('created_at >= ?', beginning_of_my_day)
   end
 
   private
