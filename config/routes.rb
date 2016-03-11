@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :users
       resources :entries
       get 'regions', to: 'regions#index'
+      post 'region', to: 'regions#create'
     end
   end
 

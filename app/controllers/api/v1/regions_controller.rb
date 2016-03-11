@@ -24,9 +24,9 @@ class Api::V1::RegionsController < ApplicationController
 
     # AKA, a user can receive either 1 auto entry or up to 2 region entries
     beginning_of_users_day = ActiveSupport::TimeZone.new(@current_user.timezone).now.beginning_of_day.utc
-    logs = EntryLog.where('created_at >= ?', beginning_of_users_day)
-    if logs.length == 0 || logs.length < 2 && logs.first.is_region?
-      entry = Entry.find_by_id(region_params[:identifier])
+    logs = @current_user.entry_logs.where('created_at >= ?', beginning_of_users_day)
+    if !Rails.env.production? || logs.length == 0 || logs.length < 2 && logs.first.is_region?
+      entry = Entry.find_by_id(region_params[:identifier].to_i)
       @current_user.add_entry_to_diary(entry)
     end
   end
@@ -34,7 +34,7 @@ class Api::V1::RegionsController < ApplicationController
   private
 
   def region_params
-    params.require(:identifier)
+    params.permit(:identifier)
   end
 
 end
