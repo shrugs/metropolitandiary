@@ -5,9 +5,17 @@ class Api::V1::RegionsController < ApplicationController
     # return regions for all of the entries not in the user's diary
     other_entries = @current_user.other_entries
     other_entries_hash = other_entries.map { |e|
+      # filter for keys we care about
       e.slice(:id, :lat, :lng, :radius)
     }.select { |e|
+      # only return regions that have valid values
       e.values.all?(&:present?)
+    }.map! { |r|
+      # modify the lat and lng values to be floats
+      # cause fuck Swift and its type safety
+      r[:lat] = r[:lat].to_f
+      r[:lng] = r[:lng].to_f
+      r
     }
     render json: other_entries_hash
   end

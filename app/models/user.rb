@@ -24,6 +24,10 @@ class User < ApplicationRecord
     Entry.where('id NOT IN (?)', entries.map(&:id))
   end
 
+  def random_other_entry
+    other_entries.order('RANDOM()').first
+  end
+
   def generate_token
     self.tokens.create
   end

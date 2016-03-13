@@ -14,11 +14,8 @@ gem 'puma'
 # gem 'capistrano-rails', group: :development
 
 gem 'rack-cors'
-
 gem 'aws-sdk', '~> 2'
-
 gem 'andand'
-
 gem 'whenever', :require => false
 
 group :development, :test do
