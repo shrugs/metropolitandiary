@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160307235319) do
+ActiveRecord::Schema.define(version: 20160408203329) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,11 +32,11 @@ ActiveRecord::Schema.define(version: 20160307235319) do
     t.string   "author"
     t.string   "permalink"
     t.datetime "date_published"
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
-    t.decimal  "lat",            precision: 10, scale: 6
-    t.decimal  "lng",            precision: 10, scale: 6
-    t.integer  "radius"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.decimal  "lat",            default: "0.0",   null: false
+    t.decimal  "lng",            default: "0.0",   null: false
+    t.decimal  "radius",         default: "500.0", null: false
   end
 
   create_table "entries_users", id: false, force: :cascade do |t|

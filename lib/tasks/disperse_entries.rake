@@ -2,10 +2,6 @@
 desc 'For every user that hasn\'t received an entry in 24 hours, send them one at the right time.'
 task :disperse_entries => :environment do
 
-  if Rails.env.development?
-    # @TODO(shrugs) remove this after bike ride
-    return
-  end
   # get 8pm at whatever timezone
   # right now, what timezone is it 8pm in?
   # get all of the users that have that as their timezone
@@ -27,8 +23,10 @@ task :disperse_entries => :environment do
   User.where('timezone = ?', zone_string).find_each do |user|
     if Rails.env.development? || user.todays_entry_logs.length < 2
       random_entry = user.random_other_entry
-      puts "Adding Entry #{random_entry.id} to User #{user.id}"
-      user.add_entry_to_diary(random_entry)
+      if !random_entry.nil?
+        puts "Adding Entry #{random_entry.id} to User #{user.id}scrape_entries.rake"
+        user.add_entry_to_diary(random_entry)
+      end
     end
   end
 end
